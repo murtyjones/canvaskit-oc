@@ -498,28 +498,6 @@ var skIsDebug = false;
   var ptr = copy1dArray(ta, "HEAPF32");
   return [ ptr, len ];
  }
- function saveBytesToFile(bytes, fileName) {
-  if (!isNode) {
-   var blob = new Blob([ bytes ], {
-    type: "application/octet-stream"
-   });
-   url = window.URL.createObjectURL(blob);
-   var a = document.createElement("a");
-   document.body.appendChild(a);
-   a.href = url;
-   a.download = fileName;
-   a.click();
-   setTimeout(function() {
-    URL.revokeObjectURL(url);
-    a.remove();
-   }, 50);
-  } else {
-   var fs = require("fs");
-   fs.writeFile(fileName, new Buffer(bytes), function(err) {
-    if (err) throw err;
-   });
-  }
- }
  CanvasKit.FourFloatArrayHelper = function() {
   this._floats = [];
   this._ptr = null;
@@ -2109,7 +2087,8 @@ var skIsDebug = false;
     return;
    }
    var bytes = CanvasKit.getSkDataBytes(data);
-   saveBytesToFile(bytes, skpName);
+   // TODO: figure out how to handle in browser context
+   // saveBytesToFile(bytes, skpName);
    data.delete();
   };
  });
